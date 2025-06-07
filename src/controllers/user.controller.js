@@ -15,38 +15,58 @@ const registerUser=asyncHandler( async(req,res)=>{
    // remove password and refresh token field from response 
    // check for user creation
    // return res
-
-
+   
+   //This gets user inputs from the frontend (like a signup form).
    const {fullname,email,username,password}=req.body
-   console.log("email",email);
+//    console.log(req.body);
+//    console.log("email",email);
 
 //    if(fullname===""){
 //     throw new ApiError(400,"fullname is needed")
 //    }
+
+//Checks that none of the fields are empty or missing
     if(
         [fullname,email,username,password].some( (field) => field?.trim() === "")
     ){
        throw new ApiError(400,"All fields are required")
     }
 
-    const existedUser=User.findOne({
+    const existedUser=await User.findOne({
         $or:[{username},{email}]
     })
 
     if(existedUser){
-        throw new ApiError(409,"User with email or username is there ")
+        console.log("Existing user found:", {
+            existingUsername: existedUser.username,
+            existingEmail: existedUser.email
+        });
+        throw new ApiError(409, `User already exists with ${
+            existedUser.email === email ? 'email' : 'username'
+        }`);
     }
-
+  console.log("No existing user found, proceeding with registration");
+    
+    
     const avatarLocalPath=req.files?.avatar[0]?.path
-    const coverImageLocalPath=req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath=req.files?.coverImage[0]?.path;
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath=req.files.coverImage[0].path
+    }
     
     if(!avatarLocalPath){
         throw new ApiError(400,"Avatar file is needed")
     }
-
+    
+    if (!req.files || !req.files.avatar) {
+        throw new ApiError(400, "Avatar file is required");
+    }
+    
     const avatar=await uploadOnCloudinary(avatarLocalPath)
     const coverImage=await uploadOnCloudinary(coverImageLocalPath)
-      
+    
+    // console.log(avatar);
     if(!avatar){
          throw new ApiError(400,"Avatar file is needed")
     }
@@ -71,7 +91,7 @@ const registerUser=asyncHandler( async(req,res)=>{
     return res.status(201).json(
         new ApiResponse(200,createdUser,"user register done")
     )
-    console.log("Raj")
+    
 })
 
 export {registerUser}

@@ -18,7 +18,8 @@ const uploadOnCloudinary=async (localFilePath) => {
         resource_type:"auto"
        })
        // file has been upload succesfull on cloudinary
-       console.log("file is uploaded",response.url);
+    //    console.log("file is uploaded",response.url);
+    fs.unlinkSync(localFilePath)
        return response;
     } catch(error){
         fs.unlinkSync(localFilePath) //remove locally saved tempory file as operation got failed
@@ -31,16 +32,16 @@ export {uploadOnCloudinary}
 
 
 
- const uploadResult = await cloudinary.uploader
-       .upload(
-           'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
-               public_id: 'shoes',
-           }
-       )
-       .catch((error) => {
-           console.log(error);
-       });
+//  const uploadResult = await cloudinary.uploader
+//        .upload(
+//            'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
+//                public_id: 'shoes',
+//            }
+//        )
+//        .catch((error) => {
+//            console.log(error);
+//        });
     
-    console.log(uploadResult);
+//     console.log(uploadResult);
 
 
