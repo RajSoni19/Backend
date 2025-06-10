@@ -111,7 +111,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 // Login User
-
  const loginUser = asyncHandler(async (req, res) => {
     //Todos
     // req body -> data
@@ -199,7 +198,7 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
         process.env.REFRESH_TOKEN_SECRET
     )
 
-    const user=User.findById(decodedToken?._id)
+    const user=await User.findById(decodedToken?._id)
  if(!user){
         throw new ApiError(401,"No user invalid refreshtoken")
     }
@@ -216,7 +215,7 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
 
     const{accessToken,newrefreshToken}=await generateAccessAndRefreshTokens(user._id)
 
-    return res.status(200).cookie("Accestoken",accessToken,options).cookie("refreshToken",newrefreshToken,options).json(
+    return res.status(200).cookie("accesstoken",accessToken,options).cookie("refreshToken",newrefreshToken,options).json(
         new ApiResponse(
             200,
             {accessToken,refreshToken:newrefreshToken},
@@ -226,6 +225,9 @@ const refreshAccessToken=asyncHandler(async(req,res)=>{
 
 
 })
+
+
+
 
 
 export {
