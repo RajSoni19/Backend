@@ -360,7 +360,6 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 });
 
 
-
 const updateUserCoverImage = asyncHandler(async (req, res) => {
     const coverImageLocalPath = req.file?.path
     if (!coverImageLocalPath) {
@@ -401,6 +400,15 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
     )
 
 })
+
+
+const getUserChannelProfile=asyncHandler(async(req,res)=>{
+   const {username}=req.param
+   if(!username?.trim()){
+    throw new ApiError(400,"",)
+   }
+})
+
 export {
     registerUser,
     loginUser,
@@ -410,5 +418,6 @@ export {
     changeCurrentPassword,
     updateAccountDetails,
     updateUserAvatar,
-    updateUserCoverImage
+    updateUserCoverImage,
+    getUserChannelProfile
 }
