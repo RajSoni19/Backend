@@ -418,10 +418,10 @@ const getUserChannelProfile=asyncHandler(async(req,res)=>{
     },
     {
         $lookup:{
-            from:"subsciptions",
-            localField:"_id",
-            foreignField:"channel",
-            as:"subscribers"
+            from:"subsciptions",  // collection to join with
+            localField:"_id", // field in current collection (this field is present in user model)
+            foreignField:"channel", // field in other collection(this is present in subscription model)
+            as:"subscribers" // name of new array field
         }
     },
     {
@@ -530,6 +530,8 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
     )
 })
 
+
+
 export {
     registerUser,
     loginUser,
@@ -541,5 +543,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+   
 }
