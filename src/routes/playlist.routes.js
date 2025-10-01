@@ -3,7 +3,7 @@ import {
     addVideoToPlaylist,
     createPlaylist,
     deletePlaylist,
-    getPlaylistById,
+   getPlaylistById,
     getUserPlaylists,
     removeVideoFromPlaylist,
     updatePlaylist,
@@ -14,17 +14,14 @@ const router = Router();
 
 router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
 
-router.route("/").post(createPlaylist)
-
+router.route("/create").post(createPlaylist);
+router.route("/update/:playlistId").patch(updatePlaylist);
+router.route("/delete/:playlistId").delete(deletePlaylist);
+router.route("/add-video/:playlistId/:videoId").patch(addVideoToPlaylist);
 router
-    .route("/:playlistId")
-    .get(getPlaylistById)
-    .patch(updatePlaylist)
-    .delete(deletePlaylist);
-
-router.route("/add/:videoId/:playlistId").patch(addVideoToPlaylist);
-router.route("/remove/:videoId/:playlistId").patch(removeVideoFromPlaylist);
-
+  .route("/remove-video/:playlistId/:videoId")
+  .patch(removeVideoFromPlaylist);
 router.route("/user/:userId").get(getUserPlaylists);
+router.route("/:playlistId").get(getPlaylistById);
 
 export default router
